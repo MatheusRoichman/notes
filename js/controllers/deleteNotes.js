@@ -1,3 +1,7 @@
+const deleteNote = note_id => {
+  
+}
+
 const deleteAllNotes = () => {
   Swal.fire({
     title: 'Tem certeza de que quer deletar TODAS as notas?',
