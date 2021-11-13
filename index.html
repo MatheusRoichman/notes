@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Bloco de Notas</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/headers.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="css/buttons.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="css/lists.css" type="text/css" media="all" />
+</head>
+
+<body>
+  <header>
+    <h1>Bloco de Notas</h1>
+  </header>
+  
+  <main>
+    <header>
+      <h2>Suas notas</h2>
+      
+      <div class="controls">
+        <button class="btn add" onclick="addNote()">Adicionar nota</button>
+        <button class="btn remove" onclick="deleteAllNotes()">Deletar notas</button>
+      </div>
+    </header>
+      
+    <ul id="notes-list">
+      
+    </ul>
+  </main>
+  
+  <!-- Utilities and external libs -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="js/utilities/createNoteLi.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/utilities/formatDateTime.js" type="text/javascript" charset="utf-8"></script>
+  
+  <!-- Note controllers -->
+  <script src="js/controllers/loadNotes.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/controllers/addNote.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/controllers/editNote.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/controllers/deleteNotes.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
