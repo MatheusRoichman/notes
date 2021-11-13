@@ -1,0 +1,16 @@
+ul {
+  text-align: left;
+  margin: 30px auto;
+  list-style: none;
+}
+
+li {
+  margin-top: 25px;
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+li:not(:last-of-type) {
+  border-bottom: 1.5px solid #7A7878;
+}
