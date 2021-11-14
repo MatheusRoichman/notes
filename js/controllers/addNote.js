@@ -23,6 +23,9 @@ const addNote = () => {
     cancelButtonText: 'Cancelar',
     preConfirm: () => {
       const now = new Date();
+      if (!localStorage.getItem('notes')) localStorage.setItem('notes', JSON.stringify({
+        notes_array: []
+      }))
       const notes_array = JSON.parse(localStorage.getItem('notes')).notes_array;
       
       const new_note = {
