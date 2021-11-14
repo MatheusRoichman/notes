@@ -20,7 +20,7 @@ const createNoteLi = (note_title, note_content, note_id) => {
   const delete_note_button = document.createElement('button');
   delete_note_button.classList.add('btn', 'remove');
   delete_note_button.innerText = 'Deletar';
-  delete_note_button.onclick = deleteNote(note_id);
+  delete_note_button.onclick = () => deleteNote(note_title, note_id);
       
   const note_controllers_div = document.createElement('div');
   note_controllers_div.className = 'note_controllers'

@@ -17,7 +17,11 @@ const addNote = () => {
   Swal.fire({
     title: 'Adicionar nota',
     html: note_form,
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
     confirmButtonText: 'Adicionar',
+    cancelButtonText: 'Cancelar',
     preConfirm: () => {
       const now = new Date();
       const all_notes_object = JSON.parse(localStorage.getItem('notes'));
@@ -50,7 +54,7 @@ const addNote = () => {
       localStorage.setItem('notes', JSON.stringify(all_notes_object));
     }
   }).then(result => {
-    Swal.fire({
+    if (result.isConfirmed) Swal.fire({
       title: 'Nota criada!',
       icon: 'success'
     })

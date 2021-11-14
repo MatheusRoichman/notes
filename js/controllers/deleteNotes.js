@@ -1,5 +1,31 @@
-const deleteNote = note_id => {
+const deleteNote = (note_title, note_id) => {
+  let notes_array = JSON.parse(localStorage.getItem('notes')).notes_array;
   
+  Swal.fire({
+    title: `Tem certeza de que deseja apagar a nota "${note_title}"?`,
+    text: 'Você não poderá recuperá-la depois.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Deletar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      for (let i in notes_array) {
+        if (notes_array[i].id === note_id) {
+          notes_array.splice(i, 1);
+      
+          localStorage.setItem('notes', JSON.stringify({
+          notes_array: notes_array
+          }))
+      
+          loadNotes();
+          return;
+        }
+      }
+    }
+  })
 }
 
 const deleteAllNotes = () => {
