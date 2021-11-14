@@ -15,7 +15,7 @@ const createNoteLi = (note_title, note_content, note_id) => {
   const edit_note_button = document.createElement('button');
   edit_note_button.classList.add('btn', 'edit');
   edit_note_button.innerText = 'Editar';
-  edit_note_button.onclick = editNote;
+  edit_note_button.onclick = () => editNote(note_title, note_content, note_id);
       
   const delete_note_button = document.createElement('button');
   delete_note_button.classList.add('btn', 'remove');

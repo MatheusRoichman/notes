@@ -1,6 +1,5 @@
 const addNote = () => {
   const note_form = document.createElement('form');
-  note_form.id = 'note_form';
 
   const note_title_input = document.createElement('input');
   note_title_input.id = 'note_title_input'
@@ -24,7 +23,7 @@ const addNote = () => {
     cancelButtonText: 'Cancelar',
     preConfirm: () => {
       const now = new Date();
-      const all_notes_object = JSON.parse(localStorage.getItem('notes'));
+      const notes_array = JSON.parse(localStorage.getItem('notes')).notes_array;
       
       const new_note = {
         title: note_title_input.value || 'Nova nota',
@@ -49,9 +48,11 @@ const addNote = () => {
         return;
       }
 
-      all_notes_object.notes_array.push(new_note);
+      notes_array.push(new_note);
 
-      localStorage.setItem('notes', JSON.stringify(all_notes_object));
+      localStorage.setItem('notes', JSON.stringify({
+        notes_array: notes_array
+      }));
     }
   }).then(result => {
     if (result.isConfirmed) Swal.fire({
