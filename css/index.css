@@ -15,3 +15,12 @@ body {
 main {
   margin: 20px 10px;
 }
+
+noscript {
+  display: block;
+  background-color: #FFC801;
+  color: #D86D03;
+  height: 30vh;
+  padding: 30px;
+  width: 100vw;
+}
