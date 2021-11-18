@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="css/lists.css" type="text/css" media="all" />
 </head>
 
-<body>
+<body onload="notes.loadNotes()">
   <noscript>
     <h2>Ative o JavaScript!</h2>
     <p>Esta aplicação depende do JavaScript para executar suas funções. Por favor, ative o JavaScript nas configurações do seu navegador.</p>
@@ -32,8 +32,8 @@
       <h2>Suas notas</h2>
       
       <div class="controls">
-        <button class="btn add" onclick="addNote()">Adicionar nota</button>
-        <button class="btn remove" onclick="deleteAllNotes()">Deletar notas</button>
+        <button class="btn add" onclick="notes.addNote()">Adicionar nota</button>
+        <button class="btn remove" onclick="notes.deleteAllNotes()">Deletar notas</button>
       </div>
     </header>
       
@@ -44,16 +44,10 @@
   
   <!-- Utilities and external libs -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  
   <script src="js/utilities/formatDateTime.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/utilities/Note.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/utilities/getNotesFromStorage.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/utilities/createNoteLi.js" type="text/javascript" charset="utf-8"></script>
   
   <!-- Note controllers -->
-  <script src="js/controllers/loadNotes.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/controllers/addNote.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/controllers/editNote.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/controllers/deleteNotes.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/Note.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/index.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

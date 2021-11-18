@@ -1,0 +1,1 @@
+const notes = new Note();
