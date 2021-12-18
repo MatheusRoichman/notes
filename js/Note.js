@@ -23,7 +23,7 @@ class Note {
     createNoteLi(note_title, note_content, note_id, note_datetime) {
         const list_element = document.createElement('li');
         list_element.id = note_id;
-        list_element.classList.add('bg-gray', 'container-fluid', 'rounded', 'p-4');
+        list_element.classList.add('bg-gray', 'container-fluid', 'rounded', 'p-4', 'my-4');
       
         const note_title_element = document.createElement('h2');
         note_title_element.innerText = note_title;
@@ -39,7 +39,7 @@ class Note {
         const edit_note_button = document.createElement('button');
         edit_note_button.classList.add('btn', 'rounded', 'btn-warning', 'm-2', 'text-light', 'text-start');
         edit_note_button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="2rem" viewBox="0 0 24 24" width="2rem" fill="#fff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg> Editar';
-        edit_note_button.onclick = () => notes.editNote(note_title, note_content, note_id);
+        edit_note_button.onclick = () => notes.editNote(note_title, note_content, note_id, note_datetime);
       
         const delete_note_button = document.createElement('button');
         delete_note_button.classList.add('btn', 'rounded', 'btn-danger', 'm-2', 'text-light', 'text-start');
@@ -111,8 +111,8 @@ class Note {
                     title: note_title_input.value || 'Nova nota',
                     content: note_content_input.value || 'Nota vazia',
                     datetime: {
-                        date: `${formatDateTime(now.getDate())}/${formatDateTime(now.getMonth()) + 1}/${now.getFullYear()}`,
-                        time: `${formatDateTime(now.getHours())}:${formatDateTime(now.getMinutes())}:${formatDateTime(now.getSeconds())}`
+                        date: formatDate(now),
+                        time: formatTime(now)
                     },
                     id: `note-${now.getTime()}`
                 }
@@ -129,7 +129,7 @@ class Note {
         });
     }
 
-    editNote(old_title, old_content, note_id) {
+    editNote(old_title, old_content, note_id, old_datetime) {
         Swal.fire({
             title: `Editando nota: "${old_title}"`,
             html: this.createNoteForm(old_title, old_content),
@@ -146,10 +146,14 @@ class Note {
                     title: note_title_input.value || old_title,
                     content: note_content_input.value || old_content,
                     datetime: {
-                        date: `${formatDateTime(now.getDate())}/${formatDateTime(now.getMonth()) + 1}/${now.getFullYear()}`,
-                        time: `${formatDateTime(now.getHours())}:${formatDateTime(now.getMinutes())}:${formatDateTime(now.getSeconds())}`
+                        date: formatDate(now),
+                        time: formatTime(now)
                     },
                     id: note_id
+                }
+                
+                if (edited_note.title === old_title && edited_note.content === old_content) {
+                  edited_note.datetime = old_datetime;
                 }
                 
                 const old_note_index = notes_array.findIndex(note => note.id === note_id);
