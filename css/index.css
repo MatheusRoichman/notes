@@ -5,22 +5,37 @@
 }
 
 body {
-  font: 1.2rem/1.6 'Roboto', sans-serif;
-  font-weight: 300;
+  font: 1.2rem/1.6 'Montserrat', sans-serif;
   width: 100%;
   height: 100vh;
-  text-align: center;
+  color: #F7F7F7;
 }
 
-main {
-  margin: 20px 10px;
+.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #F7F7F7;
+            opacity: .8; /* Firefox */
 }
 
-noscript {
-  display: block;
-  background-color: #FFC801;
-  color: #D86D03;
-  height: 30vh;
-  padding: 30px;
-  width: 100vw;
+.form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: #F7F7F7;
+            opacity: .8;
+}
+
+.form-control::-ms-input-placeholder { /* Microsoft Edge */
+            color: #F7F7F7;
+            opacity: .8;
+ }
+
+#note-search {
+  border: 0;
+  padding: .5rem 1rem;
+  border-radius: .5rem 0 0 .5rem;
+}
+
+.bg-gray, .bg-gray:focus {
+  background-color: #495057;
+}
+
+.text-small {
+  font-size: 1.1rem;
 }

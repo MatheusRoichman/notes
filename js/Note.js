@@ -20,35 +20,37 @@ class Note {
       this.loadNotes();
     }
     
-    createNoteLi(note_title, note_content, note_id) {
+    createNoteLi(note_title, note_content, note_id, note_datetime) {
         const list_element = document.createElement('li');
         list_element.id = note_id;
+        list_element.classList.add('bg-gray', 'container-fluid', 'rounded', 'p-4');
       
-        const note_title_element = document.createElement('h3');
+        const note_title_element = document.createElement('h2');
         note_title_element.innerText = note_title;
+        
+        const note_last_mod = document.createElement('p');
+        note_last_mod.classList.add('text-muted');
+        note_last_mod.innerText = `Modificado em ${note_datetime.date} ${note_datetime.time}`;
       
         const note_content_element = document.createElement('p');
+        note_content_element.classList.add('text-small');
         note_content_element.innerText = note_content;
       
-        const note_data_div = document.createElement('div');
-        note_data_div.className = 'note_data';
-        note_data_div.append(note_title_element, note_content_element);
-      
         const edit_note_button = document.createElement('button');
-        edit_note_button.classList.add('btn', 'edit');
-        edit_note_button.innerText = 'Editar';
+        edit_note_button.classList.add('btn', 'rounded', 'btn-warning', 'm-2', 'text-light', 'text-start');
+        edit_note_button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="2rem" viewBox="0 0 24 24" width="2rem" fill="#fff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg> Editar';
         edit_note_button.onclick = () => notes.editNote(note_title, note_content, note_id);
       
         const delete_note_button = document.createElement('button');
-        delete_note_button.classList.add('btn', 'remove');
-        delete_note_button.innerText = 'Deletar';
+        delete_note_button.classList.add('btn', 'rounded', 'btn-danger', 'm-2', 'text-light', 'text-start');
+        delete_note_button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="2rem" viewBox="0 0 24 24" width="2rem" fill="#fff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg> Deletar';
         delete_note_button.onclick = () => notes.deleteNote(note_title, note_id);
       
         const note_controllers_div = document.createElement('div');
-        note_controllers_div.className = 'note_controllers'
-        note_controllers_div.append(edit_note_button, delete_note_button)
+        note_controllers_div.classList.add('d-flex', 'justify-content-end', 'mt-2');
+        note_controllers_div.append(edit_note_button, delete_note_button);
       
-        list_element.append(note_data_div, note_controllers_div)
+        list_element.append(note_title_element, note_last_mod, note_content_element, note_controllers_div);
       
         return list_element;
     }
@@ -60,13 +62,13 @@ class Note {
         note_title_input.id = 'note_title_input'
         note_title_input.className = 'swal2-input'
         note_title_input.placeholder = 'Título da nota';
-        if (note_title_value) note_title_input.value = note_title_value;
+        note_title_input.value = note_title_value || '';
 
         const note_content_input = document.createElement('textarea');
         note_content_input.id = 'note_content_input'
         note_content_input.className = 'swal2-textarea'
         note_content_input.placeholder = 'Conteúdo da nota';
-        if (note_content_value) note_content_input.value = note_content_value;
+        note_content_input.value = note_content_value || '';
 
         note_form.append(note_title_input, note_content_input)
         
@@ -81,14 +83,14 @@ class Note {
         const notes_array = this.getNotesFromStorage();
 
         if (!notes_array.length) {
-            const no_notes_title = document.createElement('h3');
-            no_notes_title.innerText = 'Não há notas';
-            notes_ul.appendChild(no_notes_title);
+            document.querySelector('#note-count').innerText = 'Não há notas';
             return;
         }
+        
+        document.querySelector('#note-count').innerText = notes_array.length == 1 ? '1 nota' : `${notes_array.length} notas`;
 
         for (let note of notes_array) {
-            notes_ul.appendChild(this.createNoteLi(note.title, note.content, note.id));
+            notes_ul.appendChild(this.createNoteLi(note.title, note.content, note.id, note.datetime));
         }
     }
 
