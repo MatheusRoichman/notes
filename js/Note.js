@@ -75,9 +75,11 @@ class Note {
         notes_ul.innerHTML = '';
         
         if (!notes_array.length) {
-            document.querySelector('#note-count').innerText = 'Não há notas';
+            document.querySelector('#note-count').innerHTML = 'Não há notas';
             return;
         }
+        
+        document.querySelector('#note-count').innerHTML = notes_array.length === 1 ? '1 nota' : `${notes_array.length} notas`;
     
         for (let note of notes_array) {
             notes_ul.appendChild(this.createNoteLi(note, note?.highlighted));
@@ -213,6 +215,9 @@ class Note {
     
     searchForNotes(event) {
         event.preventDefault();
+      
+        if (document.querySelector('#return-btn').classList.contains('d-none')) document.querySelector('#return-btn').classList.replace('d-none', 'd-flex');
+        
         const notes_array = this.getNotesFromStorage();
         
         const search = document.querySelector('#note-search').value;
