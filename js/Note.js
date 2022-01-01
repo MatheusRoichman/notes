@@ -3,13 +3,7 @@ class Note {
     
     // Utilities
     getNotesFromStorage() {
-        if (!localStorage.getItem('notes')) {
-          localStorage.setItem('notes', JSON.stringify({
-            notes_array: []
-          }))
-        }
-      
-        return JSON.parse(localStorage.getItem('notes')).notes_array;
+      return JSON.parse(localStorage.getItem('notes')).notes_array;
     }
     
     setNotesInStorage(notes_array) {
@@ -20,31 +14,31 @@ class Note {
       this.loadNotes();
     }
     
-    createNoteLi(note_title, note_content, note_id, note_datetime) {
+    createNoteLi(note, highlighted = {}) {
         const list_element = document.createElement('li');
-        list_element.id = note_id;
+        list_element.id = note.id;
         list_element.classList.add('bg-gray', 'container-fluid', 'rounded', 'p-4', 'my-4');
       
         const note_title_element = document.createElement('h2');
-        note_title_element.innerText = note_title;
-        
+        note_title_element.innerHTML = highlighted.title || note.title;
+       
         const note_last_mod = document.createElement('p');
         note_last_mod.classList.add('text-muted');
-        note_last_mod.innerText = `Modificado em ${note_datetime.date} ${note_datetime.time}`;
+        note_last_mod.innerHTML = `Modificado em ${note.datetime.date} ${note.datetime.time}`;
       
         const note_content_element = document.createElement('p');
         note_content_element.classList.add('text-small');
-        note_content_element.innerText = note_content;
+        note_content_element.innerHTML = highlighted.content || note.content;
       
         const edit_note_button = document.createElement('button');
         edit_note_button.classList.add('btn', 'rounded', 'btn-warning', 'm-2', 'text-light', 'text-start');
         edit_note_button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="2rem" viewBox="0 0 24 24" width="2rem" fill="#fff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg> Editar';
-        edit_note_button.onclick = () => notes.editNote(note_title, note_content, note_id, note_datetime);
+        edit_note_button.onclick = () => notes.editNote(note);
       
         const delete_note_button = document.createElement('button');
         delete_note_button.classList.add('btn', 'rounded', 'btn-danger', 'm-2', 'text-light', 'text-start');
         delete_note_button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="2rem" viewBox="0 0 24 24" width="2rem" fill="#fff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg> Deletar';
-        delete_note_button.onclick = () => notes.deleteNote(note_title, note_id);
+        delete_note_button.onclick = () => notes.deleteNote(note.title, note.id);
       
         const note_controllers_div = document.createElement('div');
         note_controllers_div.classList.add('d-flex', 'justify-content-end', 'mt-2');
@@ -57,7 +51,6 @@ class Note {
     
     createNoteForm(note_title_value, note_content_value) {
         const note_form = document.createElement('form');
-
         const note_title_input = document.createElement('input');
         note_title_input.id = 'note_title_input'
         note_title_input.className = 'swal2-input'
@@ -76,22 +69,20 @@ class Note {
     }
     
     // Controllers
-    loadNotes() {
+    loadNotes(notes_array = this.getNotesFromStorage()) {
         const notes_ul = document.querySelector('#notes-list');
 
         notes_ul.innerHTML = '';
-        const notes_array = this.getNotesFromStorage();
-
+        
         if (!notes_array.length) {
             document.querySelector('#note-count').innerText = 'Não há notas';
             return;
         }
-        
-        document.querySelector('#note-count').innerText = notes_array.length == 1 ? '1 nota' : `${notes_array.length} notas`;
-
+    
         for (let note of notes_array) {
-            notes_ul.appendChild(this.createNoteLi(note.title, note.content, note.id, note.datetime));
+            notes_ul.appendChild(this.createNoteLi(note, note?.highlighted));
         }
+        return;
     }
 
     addNote() {
@@ -129,34 +120,34 @@ class Note {
         });
     }
 
-    editNote(old_title, old_content, note_id, old_datetime) {
+    editNote(old_note) {
         Swal.fire({
-            title: `Editando nota: "${old_title}"`,
-            html: this.createNoteForm(old_title, old_content),
+            title: `Editando nota: "${old_note.title}"`,
+            html: this.createNoteForm(old_note.title, old_note.content),
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Salvar',
             cancelButtonText: 'Cancelar',
             preConfirm: () => {
-                let notes_array = this.getNotesFromStorage();
+                const notes_array = this.getNotesFromStorage();
                 const now = new Date();
 
                 const edited_note = {
-                    title: note_title_input.value || old_title,
-                    content: note_content_input.value || old_content,
+                    title: note_title_input.value || old_note.title,
+                    content: note_content_input.value || old_note.content,
                     datetime: {
                         date: formatDate(now),
                         time: formatTime(now)
                     },
-                    id: note_id
+                    id: old_note.id
                 }
                 
-                if (edited_note.title === old_title && edited_note.content === old_content) {
-                  edited_note.datetime = old_datetime;
+                if (edited_note.title === old_note.title && edited_note.content === old_note.content) {
+                  edited_note.datetime = old_note.datetime;
                 }
                 
-                const old_note_index = notes_array.findIndex(note => note.id === note_id);
+                const old_note_index = notes_array.findIndex(note => note.id === old_note.id);
 
                 notes_array[old_note_index] = edited_note;
                 
@@ -171,7 +162,7 @@ class Note {
     }
 
     deleteNote(note_title, note_id) {
-        let notes_array = this.getNotesFromStorage();
+        const notes_array = this.getNotesFromStorage();
 
         Swal.fire({
             title: `Tem certeza de que deseja apagar a nota "${note_title}"?`,
@@ -208,7 +199,7 @@ class Note {
             confirmButtonText: 'Deletar',
             cancelButtonText: 'Cancelar',
             preConfirm: () => {
-              localStorage.removeItem('notes');
+              this.setNotesInStorage([]);
               this.loadNotes()
             }
         }).then((result) => {
@@ -218,5 +209,42 @@ class Note {
                     'success'
             );
         });
+    }
+    
+    searchForNotes(event) {
+        event.preventDefault();
+        const notes_array = this.getNotesFromStorage();
+        
+        const search = document.querySelector('#note-search').value;
+        
+        let search_results = fuzzysort.go(
+            search,
+            notes_array,
+            {
+                threshold: -999,
+                allowTypo: true,
+                keys: ['title', 'content']
+            }
+        );
+        
+        delete search_results['total'];
+        
+        const highlighted_search_results = [];
+
+        for (let i in search_results) {
+            const result = search_results[i];
+
+            const highlighted = {
+                title: fuzzysort.highlight(result[0], '<strong>', '</strong>'),
+                content: fuzzysort.highlight(result[1], '<strong>', '</strong>')
+            }
+           
+            highlighted_search_results.push({
+                ...result["obj"],
+                highlighted
+            });
+        }
+
+        this.loadNotes(highlighted_search_results);
     }
 }

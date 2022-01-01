@@ -39,3 +39,7 @@ body {
 .text-small {
   font-size: 1.1rem;
 }
+
+strong {
+    color: var(--bs-primary);
+}
