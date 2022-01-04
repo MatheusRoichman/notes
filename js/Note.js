@@ -11,20 +11,24 @@ class Note {
         notes_array
       }));
       
-      this.loadNotes();
+      this.sortNotes();
     }
     
     createNoteLi(note, highlighted = {}) {
         const list_element = document.createElement('li');
         list_element.id = note.id;
-        list_element.classList.add('bg-gray', 'container-fluid', 'rounded', 'p-4', 'my-4');
+        list_element.classList.add('note', 'bg-gray', 'container-fluid', 'rounded', 'p-4', 'my-4', 'pb-3', 'opacity-0');
       
         const note_title_element = document.createElement('h2');
         note_title_element.innerHTML = highlighted.title || note.title;
+        
+        const note_creation = document.createElement('p');
+        note_creation.classList.add('text-muted', 'text-small');
+        note_creation.innerHTML = `Criado em ${formatDate(new Date(note.datetime.creation))} ${formatTime(new Date(note.datetime.creation))}`;
        
         const note_last_mod = document.createElement('p');
-        note_last_mod.classList.add('text-muted');
-        note_last_mod.innerHTML = `Modificado em ${note.datetime.date} ${note.datetime.time}`;
+        note_last_mod.classList.add('text-muted', 'text-small', 'mb-1');
+        note_last_mod.innerHTML = `Modificado em ${formatDate(new Date(note.datetime.edition))} ${formatTime(new Date(note.datetime.edition))}`;
       
         const note_content_element = document.createElement('p');
         note_content_element.classList.add('text-small');
@@ -44,7 +48,7 @@ class Note {
         note_controllers_div.classList.add('d-flex', 'justify-content-end', 'mt-2');
         note_controllers_div.append(edit_note_button, delete_note_button);
       
-        list_element.append(note_title_element, note_last_mod, note_content_element, note_controllers_div);
+        list_element.append(note_creation, note_title_element, note_content_element, note_last_mod, note_controllers_div);
       
         return list_element;
     }
@@ -82,7 +86,9 @@ class Note {
         document.querySelector('#note-count').innerHTML = notes_array.length === 1 ? '1 nota' : `${notes_array.length} notas`;
     
         for (let note of notes_array) {
-            notes_ul.appendChild(this.createNoteLi(note, note?.highlighted));
+            const note_list_element = this.createNoteLi(note, note?.highlighted);
+
+            notes_ul.appendChild(note_list_element);
         }
         return;
     }
@@ -104,8 +110,8 @@ class Note {
                     title: note_title_input.value || 'Nova nota',
                     content: note_content_input.value || 'Nota vazia',
                     datetime: {
-                        date: formatDate(now),
-                        time: formatTime(now)
+                        creation: now, 
+                        edition: now
                     },
                     id: `note-${now.getTime()}`
                 }
@@ -139,14 +145,14 @@ class Note {
                     title: note_title_input.value || old_note.title,
                     content: note_content_input.value || old_note.content,
                     datetime: {
-                        date: formatDate(now),
-                        time: formatTime(now)
+                        creation: old_note.datetime.creation,
+                        edition: now
                     },
                     id: old_note.id
                 }
                 
                 if (edited_note.title === old_note.title && edited_note.content === old_note.content) {
-                  edited_note.datetime = old_note.datetime;
+                  edited_note.datetime.edition = old_note.datetime.edition;
                 }
                 
                 const old_note_index = notes_array.findIndex(note => note.id === old_note.id);
@@ -202,7 +208,6 @@ class Note {
             cancelButtonText: 'Cancelar',
             preConfirm: () => {
               this.setNotesInStorage([]);
-              this.loadNotes()
             }
         }).then((result) => {
             if (result.isConfirmed) Swal.fire(
@@ -249,7 +254,72 @@ class Note {
                 highlighted
             });
         }
+        
+        localStorage.setItem('current-search', JSON.stringify({
+              search_results: highlighted_search_results
+            }));
 
-        this.loadNotes(highlighted_search_results);
+        this.sortNotes(undefined, highlighted_search_results);
+    }
+    
+    sortNotes(order = localStorage.getItem('current-order') || 'recent-mod', notes_array = JSON.parse(localStorage.getItem('current-search'))?.search_results || this.getNotesFromStorage()) {
+        
+        localStorage.setItem('current-order', order);
+        
+        if (localStorage.getItem('current-search')) notes_array = JSON.parse(localStorage.getItem('current-search')).search_results;
+        
+        const setDropdownHTML = html => {
+            document.querySelector('#dropdown-toggle').innerHTML = `Ordem: ${html}`;
+        };
+        
+        this.loadNotes((function() {
+            switch (order) {
+                case 'recent-mod':
+                    setDropdownHTML('Modificação (mais recente)')
+                
+                    return notes_array;
+                
+                    break;
+            
+                case 'old-mod':
+                    setDropdownHTML('Modificação (mais antiga)')
+                
+                    return notes_array;
+                
+                    break;
+            
+                case 'recent-creation':
+                setDropdownHTML('Criação (mais recente)')
+                
+                    return notes_array;
+                
+                    break;
+            
+                case 'old-creation':
+                    setDropdownHTML('Criação (mais antiga)')
+                
+                    return notes_array;
+                
+                    break;
+                
+                case 'title-a-z':
+                    setDropdownHTML('Título (A-Z)')
+                
+                    return notes_array.sort((a, b) => a.title.localeCompare(b.title));
+                
+                    break;
+                
+                case 'title-z-a':
+                    setDropdownHTML('Título (Z-A)');
+                
+                    return notes_array.sort((a, b) => b.title.localeCompare(a.title));
+                
+                    break;
+                
+                default:
+                    return notes_array;
+                    break;
+            }
+        }()))
     }
 }

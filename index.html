@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="./css/index.css" type="text/css" media="screen" />
 </head>
 
-<body onplay="notes.loadNotes()" class="bg-dark text-light">
+<body class="bg-dark text-light">
   <noscript class="d-block bg-warning text-light p-3">
     <h2>Ative o JavaScript!</h2>
     <p>Esta aplicação depende do JavaScript para executar suas funções. Por favor, ative o JavaScript nas configurações do seu navegador.</p>
@@ -35,33 +35,42 @@
       
       <div class="form-row py-3">
         <div class="dropdown">
-          <button class="btn bg-gray form-control dropdown-toggle text-light col-6" type="button" id="dropdown-order" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+          <button class="btn bg-gray form-control dropdown-toggle text-light col-6" type="button" id="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             Ordenar por...
           </button>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown-order">
             <li>
-              <button type="button" class="dropdown-item">Modificação (mais recente)</button>
+              <button type="button" class="dropdown-item" onclick="notes.sortNotes('recent-mod')">Modificação (mais recente)</button>
             </li>
             <li>
               <hr class="dropdown-divider"></hr>
             </li>
             <li>
-              <button type="button" class="dropdown-item">Modificação (mais antiga)</button>
+              <button type="button" class="dropdown-item" onclick="notes.sortNotes('old-mod')">Modificação (mais antiga)</button>
+            </li>
+            <li>
+                <hr class="dropdown-divider"></hr>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item" onclick="notes.sortNotes('recent-creation')">Criação (mais recente)</button>
+            </li>
+            <li>
+                <hr class="dropdown-divider"></hr>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item" onclick="notes.sortNotes('old-creation')">Criação (mais antiga)</button>
             </li>
             <li>
               <hr class="dropdown-divider"></hr>
             </li>
             <li>
-              <hr class="dropdown-divider"></hr>
-            </li>
-            <li>
-              <button type="button" class="dropdown-item">Título (A-Z)</button>
+              <button type="button" class="dropdown-item" onclick="notes.sortNotes('title-a-z')">Título (A-Z)</button>
             </li>
             <li>
               <hr class="dropdown-divider"></hr>
             </li>
             <li>
-              <button type="button" class="dropdown-item">Título (Z-A)</button>
+              <button type="button" class="dropdown-item" onclick="notes.sortNotes('title-z-a')">Título (Z-A)</button>
             </li>
           </ul>
         </div>
@@ -103,7 +112,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <script src="https://rawgit.com/farzher/fuzzysort/master/fuzzysort.js"></script>
   <script src="./js/utilities/formatDateTime.js" type="text/javascript" charset="utf-8"></script>
-  <script src="./js/utilities/return.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/utilities/returnToNotes.js" type="text/javascript" charset="utf-8"></script>
   
   <!--Note controllers -->
   <script src="./js/Note.js" type="text/javascript" charset="utf-8"></script>

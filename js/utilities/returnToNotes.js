@@ -1,7 +1,9 @@
 const returnToNotes = () => {
     const return_button = document.querySelector('#return-btn');
     
-    notes.loadNotes();
+    localStorage.removeItem('current-search');
+    
+    notes.sortNotes();
     
     document.querySelector('#note-search').value = '';
     

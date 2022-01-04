@@ -1,2 +1,7 @@
 const notes = new Note();
-window.onload = notes.loadNotes();
+
+if (!localStorage.getItem('notes_array')) {
+    notes.setNotesInStorage([]);
+}
+
+window.onload = notes.sortNotes();
