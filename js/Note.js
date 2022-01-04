@@ -263,7 +263,6 @@ class Note {
     }
     
     sortNotes(order = localStorage.getItem('current-order') || 'recent-mod', notes_array = JSON.parse(localStorage.getItem('current-search'))?.search_results || this.getNotesFromStorage()) {
-        
         localStorage.setItem('current-order', order);
         
         if (localStorage.getItem('current-search')) notes_array = JSON.parse(localStorage.getItem('current-search')).search_results;
@@ -276,29 +275,29 @@ class Note {
             switch (order) {
                 case 'recent-mod':
                     setDropdownHTML('Modificação (mais recente)')
-                
-                    return notes_array;
+
+                    return notes_array.sort((a, b) => new Date(a.datetime.edition).getTime() > new Date(b.datetime.edition).getTime());
                 
                     break;
             
                 case 'old-mod':
                     setDropdownHTML('Modificação (mais antiga)')
                 
-                    return notes_array;
+                    return notes_array.sort((a, b) => new Date(a.datetime.edition).getTime() < new Date(b.datetime.edition).getTime());
                 
                     break;
             
                 case 'recent-creation':
                 setDropdownHTML('Criação (mais recente)')
                 
-                    return notes_array;
+                    return notes_array.sort((a, b) => new Date(a.datetime.creation).getTime() > new Date(b.datetime.creation).getTime());
                 
                     break;
             
                 case 'old-creation':
                     setDropdownHTML('Criação (mais antiga)')
                 
-                    return notes_array;
+                    return notes_array.sort((a, b) => new Date(a.datetime.creation).getTime() < new Date(b.datetime.creation).getTime());
                 
                     break;
                 

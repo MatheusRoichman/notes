@@ -1,6 +1,6 @@
 const notes = new Note();
 
-if (!localStorage.getItem('notes_array')) {
+if (!notes.getNotesFromStorage()) {
     notes.setNotesInStorage([]);
 }
 
