@@ -270,34 +270,34 @@ class Note {
         const setDropdownHTML = html => {
             document.querySelector('#dropdown-toggle').innerHTML = `Ordem: ${html}`;
         };
-        
+        console.log(order);
         this.loadNotes((function() {
             switch (order) {
                 case 'recent-mod':
                     setDropdownHTML('Modificação (mais recente)')
 
-                    return notes_array.sort((a, b) => new Date(a.datetime.edition).getTime() > new Date(b.datetime.edition).getTime());
+                    return notes_array.sort((a, b) => new Date(a.datetime.edition).getTime() + new Date(b.datetime.edition).getTime());
                 
                     break;
             
                 case 'old-mod':
                     setDropdownHTML('Modificação (mais antiga)')
                 
-                    return notes_array.sort((a, b) => new Date(a.datetime.edition).getTime() < new Date(b.datetime.edition).getTime());
+                    return notes_array.sort((a, b) => new Date(a.datetime.edition).getTime() - new Date(b.datetime.edition).getTime());
                 
                     break;
             
                 case 'recent-creation':
-                setDropdownHTML('Criação (mais recente)')
+                    setDropdownHTML('Criação (mais recente)')
                 
-                    return notes_array.sort((a, b) => new Date(a.datetime.creation).getTime() > new Date(b.datetime.creation).getTime());
+                    return notes_array.sort((a, b) => new Date(a.datetime.creation).getTime() + new Date(b.datetime.creation).getTime());
                 
                     break;
             
                 case 'old-creation':
                     setDropdownHTML('Criação (mais antiga)')
                 
-                    return notes_array.sort((a, b) => new Date(a.datetime.creation).getTime() < new Date(b.datetime.creation).getTime());
+                    return notes_array.sort((a, b) => new Date(a.datetime.creation).getTime() - new Date(b.datetime.creation).getTime());
                 
                     break;
                 
