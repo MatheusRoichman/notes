@@ -3,7 +3,7 @@ class Note {
     
     // Utilities
     getNotesFromStorage() {
-      return JSON.parse(localStorage.getItem('notes')).notes_array;
+      return JSON.parse(localStorage.getItem('notes'))?.notes_array;
     }
     
     setNotesInStorage(notes_array) {
@@ -74,6 +74,8 @@ class Note {
     
     // Controllers
     loadNotes(notes_array = this.getNotesFromStorage()) {
+        console.log(notes_array);
+        
         const notes_ul = document.querySelector('#notes-list');
 
         notes_ul.innerHTML = '';
@@ -270,13 +272,13 @@ class Note {
         const setDropdownHTML = html => {
             document.querySelector('#dropdown-toggle').innerHTML = `Ordem: ${html}`;
         };
-        console.log(order);
+        
         this.loadNotes((function() {
             switch (order) {
                 case 'recent-mod':
                     setDropdownHTML('Modificação (mais recente)')
 
-                    return notes_array.sort((a, b) => new Date(a.datetime.edition).getTime() + new Date(b.datetime.edition).getTime());
+                    return notes_array.sort((a, b) => new Date(b.datetime.edition).getTime() - new Date(a.datetime.edition).getTime());
                 
                     break;
             
@@ -290,7 +292,7 @@ class Note {
                 case 'recent-creation':
                     setDropdownHTML('Criação (mais recente)')
                 
-                    return notes_array.sort((a, b) => new Date(a.datetime.creation).getTime() + new Date(b.datetime.creation).getTime());
+                    return notes_array.sort((a, b) => new Date(b.datetime.creation).getTime() - new Date(a.datetime.creation).getTime());
                 
                     break;
             
@@ -298,7 +300,7 @@ class Note {
                     setDropdownHTML('Criação (mais antiga)')
                 
                     return notes_array.sort((a, b) => new Date(a.datetime.creation).getTime() - new Date(b.datetime.creation).getTime());
-                
+                    
                     break;
                 
                 case 'title-a-z':
